@@ -1,40 +1,34 @@
 package cz.moneta;
 
+import jxl.Workbook;
+import jxl.format.Colour;
 import jxl.write.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-public class ExcelWriter {
-    public static void saveToXlsFile(String filename, Map<String, List<List<String>>> data) {
+class ExcelWriter {
+    private final String filename;
+    private WritableWorkbook workbook;
+
+    public ExcelWriter(String filename) {
+        this.filename = filename;
         try {
-            WritableWorkbook workbook = jxl.Workbook.createWorkbook(new File(filename));
+            workbook = Workbook.createWorkbook(Path.of(filename).toFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void saveToXlsFile(Map<String, List<List<String>>> data) {
+        try {
             for (Map.Entry<String, List<List<String>>> sheet : data.entrySet()) {
-                List<List<String>> cells = sheet.getValue();
-                List<WritableCell> writableCells = new ArrayList<>();
+                WritableSheet writableSheet = workbook.createSheet(sheet.getKey(), 0);
 
-                for (int row = 0; row < cells.size(); row++) {
-                    for (int col = 0; col < cells.get(row).size(); col++) {
-                        writableCells.add(new Label(col, row, cells.get(row).get(col)));
-                    }
-                }
-
-
-                WritableSheet workbookSheet = workbook.createSheet(sheet.getKey(), 0);
-
-                for (WritableCell cell : writableCells) {
-                    workbookSheet.addCell(cell);
-                }
-
-                // format cells width
-                for (int i = 0; i < cells.size(); i++) {
-                    workbookSheet.setColumnView(i, 25);
-                }
-
+                addCells(writableSheet, sheet.getValue());
+                formatCells(writableSheet);
             }
             workbook.write();
             workbook.close();
@@ -42,6 +36,35 @@ public class ExcelWriter {
         } catch (WriteException | IOException e) {
             e.printStackTrace();
         }
-
     }
+
+    private void addCells(WritableSheet sheet, List<List<String>> data) {
+        for (int row = 0; row < data.size(); row++) {
+            for (int col = 0; col < data.get(row).size(); col++) {
+                Label label = new Label(col, row, data.get(row).get(col));
+                try {
+                    sheet.addCell(label);
+                } catch (WriteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void formatCells(WritableSheet sheet) {
+        try {
+            for (int col = 0; col < sheet.getColumns(); col++) {
+                WritableCell writableCell = sheet.getWritableCell(col, 0);
+                WritableFont font = new WritableFont(WritableWorkbook.ARIAL_10_PT);
+                font.setBoldStyle(WritableFont.BOLD);
+                WritableCellFormat newFormat = new WritableCellFormat(font);
+                newFormat.setBackground(Colour.LIGHT_GREEN);
+                writableCell.setCellFormat(newFormat);
+                sheet.setColumnView(col, 25);
+            }
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

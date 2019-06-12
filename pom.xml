@@ -6,14 +6,17 @@
 
     <groupId>xmlExtractor</groupId>
     <artifactId>xmlExtractor</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
+    <version>1.0</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <finalName>xml2csv</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>

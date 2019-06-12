@@ -13,11 +13,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class XmlResponses {
+class XmlResponses {
 
     private List<Document> documents;
 
-    public XmlResponses loadFrom(String fileName) {
+    XmlResponses(String fileName) {
         try {
             documents = Files.lines(Path.of(fileName))
                     .map(XmlResponses::getDocument)
@@ -25,7 +25,6 @@ public class XmlResponses {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return this;
     }
 
     private static Document getDocument(String xml) {
@@ -40,7 +39,7 @@ public class XmlResponses {
         return document;
     }
 
-    public List<Document> getDocuments() {
+    List<Document> getDocuments() {
         return documents;
     }
 }
