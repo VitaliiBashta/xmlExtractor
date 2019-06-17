@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +19,7 @@ class XmlResponses {
 
     XmlResponses(String fileName) {
         try {
-            documents = Files.lines(Path.of(fileName))
+            documents = Files.lines(Paths.get(fileName))
                     .map(XmlResponses::getDocument)
                     .collect(Collectors.toList());
         } catch (IOException e) {

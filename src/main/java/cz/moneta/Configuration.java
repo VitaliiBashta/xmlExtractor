@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -55,6 +56,6 @@ class Configuration {
                 .filter(p -> p.getKey().toString().endsWith(".headers"))
                 .collect(Collectors.toMap(
                         entry -> entry.getKey().toString().split(".headers")[0],
-                        entry -> List.of(entry.getValue().toString().split(","))));
+                        entry -> Arrays.asList(entry.getValue().toString().split(","))));
     }
 }

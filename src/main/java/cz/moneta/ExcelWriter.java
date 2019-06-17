@@ -6,6 +6,7 @@ import jxl.write.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ class ExcelWriter {
     public ExcelWriter(String filename) {
         this.filename = filename;
         try {
-            workbook = Workbook.createWorkbook(Path.of(filename).toFile());
+            workbook = Workbook.createWorkbook(Paths.get(filename).toFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
